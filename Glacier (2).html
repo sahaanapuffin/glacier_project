@@ -1,0 +1,242 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>Glacier Time-Machine</title>
+	<style>
+		body 
+		{
+			padding: 10px;
+			border-radius: 130px;
+			background-color: #3B4E60;
+			text-align: center;
+			font-family: serif;
+			font-size: 24px;
+			color:white;
+			margin: 25px 200px
+		}
+		h1
+		{
+			color: white;
+			font-family: serif;
+			font-size: 20px;
+		}
+
+		.button {
+		background-color: #17659A;
+		border: none;
+		color: white;
+		padding: 10px 32px;
+		text-align: center;
+		text-decoration: none;
+		display: inline-block;
+		font-size: 16px;
+		margin: 4px 2px;
+		cursor: pointer;
+		font-family: font-family: serif;
+		}
+		.button2 {
+		background-color: #17659A;
+		border: none;
+		color: white;
+		padding: 5px 32px;
+		text-align: center;
+		text-decoration: none;
+		display: inline-block;
+		font-size: 16px;
+		margin: 4px 2px;
+		cursor: pointer;
+		font-family: font-family: serif;
+		}
+	</style>
+	
+		
+	<script>
+		var prediction_array =[];
+
+		function showInstructions()
+		{
+			idInstructions.innerHTML = "Using EasyMl Predictions, watch the glacier change size and area by time traveling to the past or future. Enter in a year to see the glacier change size respectively. For every 100 pixels, 1km^2 is represented. Click on the glacier to see which glacier is being represented.";
+			var instructionButtonCode = "<input type='button' value='Hide Instructions' onClick='hideInstructions()' class = 'button'>";
+			idInstructionButtonCode.innerHTML = instructionButtonCode;
+		}
+
+		function hideInstructions()
+		{
+			idInstructions.innerHTML = "";
+			var instructionButtonCode = "<input type='button' value='Show Instructions' onClick='showInstructions()' class = 'button'>";
+			idInstructionButtonCode.innerHTML = instructionButtonCode;
+		}
+		
+		function showWerenskioldbreenInfo()
+		{
+			idGlacierInfo.innerHTML = "Werenskioldbreen is a glacier located in Svalbard, Norway. It was named after geologist and Arctic explorer Werner Werenskiold.";
+		}
+
+		function showWolverineInfo()
+		{
+			idGlacierInfo.innerHTML = "The Wolverine Glacier is located along the coast of south-central Alaska in the Kenai Mountains.";
+		}
+
+		function showGussfeldtInfo()
+		{
+			idGlacierInfo.innerHTML = "Gussfelft Glacier is named after a German Mountaineer. It is located in Argentina.";
+		}
+
+		function predictCSV()
+		{
+			handleFile("results.csv")
+		}
+
+		function switchBack1()
+		{
+			idFlashCard1.src="1back.png"
+		}
+
+		function switchBack2()
+		{
+			idFlashCard2.src="2back.png"
+		}
+
+		function switchBack3()
+		{
+			idFlashCard3.src="3back.png"
+		}
+
+		function switchBack4()
+		{
+			idFlashCard4.src="4back.png"
+		}
+
+		function getAsText(fileToRead)
+		{
+			let reader = new FileReader();
+
+			reader.onload = loadHandler;
+			reader.onerror = errorHandler;
+		}
+
+
+		function handleFile(file)
+		{
+			if(window.FileReader)
+			{
+				getAsText(file[0]);
+				fileUploaded = true;
+			}
+			else
+			{
+				alert('FileReader not supported in browser.');
+			}
+		}
+
+		function loadHandler(event)
+		{
+			let csv = event.target.result;
+			processData(csv);
+		}
+
+		function errorHandler(evt)
+		{
+			if(evt.target.error.name == "NotReadableError")
+			{
+				alert('Cannot read file.')
+			}
+		}
+
+		function processData(csv)
+		{
+			let allTextLines = csv.split('\n');
+
+			for(let i = 0; i < allTextLines.length; i++)
+			{
+				let row = allTextLines[i].split(';');
+
+				let col = [];
+
+				for(let j = 0; j< row.length;j++)
+				{
+					col.push(row[j])
+				}
+
+				prediction_array.push(col);
+			}
+			manipulateGlacier(prediction_array[3])
+		}
+
+		function manipulateGlacier(area)
+		{
+			var newArea = area * 100
+			idGlacier2.style="width:" + newArea + "px"
+		}
+
+	</script>
+</head>
+
+
+
+<body>
+	<h1><img id="idTitlePic" src="title.png" style="height:300px">
+		<br>
+		Made with EazyML:
+		<a href="https://eazyml.com/">Check them out here!</a>
+	</h1>
+	<br>
+	<div id="idInstructionButtonCode"><input type="button" value="Show Instructions" onClick="showInstructions()" class = "button"></div>
+	<div id="idInstructions"></div>
+	<br>
+	<p>
+		<a href="#ClimateChange">Jump To What You Can Do About Climate Change</a>.
+	</p>
+	<form action = "C:\Users\csankar1\Downloads\eazyml-client-master\run.py" method="post" onSubmit = "predictCSV()">
+		<input type="text" id="idInput" placeholder="Enter A Year" name ="year">
+		<input class = "button2" type = "submit" value = "Predict Glacier" />
+	</form>
+	<br>
+	<p></p>
+	<br>
+	<br>
+	<img id="idGlacier2" src="glacier2.png" style=" width:159px;" onClick="showWolverineInfo()">
+	<br>
+	<div id="idGlacierInfo"></div>
+	<br>
+	<br>
+	<br>
+	There are over 190,000 glaciers around the world. Explore the map to see thousands of glacier locations across the globe.
+	<br>
+	<br>
+	<iframe src="gtm.html" width=500px height=500px></iframe>
+	<br>
+	<h2>Glaciers Disappearing</h2>
+	<img id="idGlacierComp" src="glacier_comparison.jpg" style=" height:400px; margin: 5px">
+	<br>
+	<div>Over the last few decades, glaciers have been disappearing all over the world due to the human-impact on Earth's climate. The Pedersen Glacier, along with many other glaciers around the world, have reduced in mass greatly. Scientists continue to research not only how Earth's climate during the ice age effected glacier mass, but also how humans are causing glaciers to disappear in modern day.</div>
+	<br>
+	<img id="idGlacierComp2" src="Glacier_Comparison2.jpg" style=" height:500px; margin: 5px">
+	<br>
+	<h2>Glacier Wildlife</h2>
+	<img id="idWildlife1" src="wildlife1.jpg" style=" height:150px;">
+	<img id="idWildlife2" src="wildlife2.jpg" style=" height:150px;">
+	<img id="idWildlife3" src="wildlife3.jpg" style=" height:150px;">
+	<img id="idWildlife4" src="wildlife4.jpg" style=" height:150px;">
+	<img id="idWildlife5" src="wildlife5.jpg" style=" height:150px;">
+	<img id="idWildlife6" src="wildlife6.jpg" style=" height:150px;">
+	<br>
+	Devastatingly, as these glaciers disappear, ecosystems do too. Many species rely on the ecosystems glaciers provide, and with many of these ecosystems being destroyed, species will go extinct.
+	Many animals who live along the delicate glacier ecosystem have adapted to the unique conditions. The drastic changes in the glacier ecosystems over the last several years have disrupted these once
+	balanced ecosystems. Species living in glacier streams are arguably the hardest hit. Many fish living in glacier streams are not used to the large amounts of ice water being melted into the streams
+	causing many species to suffer. But, it's not too late yet. Help these thousands of animals keep their homes. Take steps to prevent these harmful effect of human-caused climate change.
+	<br>
+	<br>
+	<h2 id="ClimateChange">What Can You Do About Climate Change?</h2>
+	<p>
+		Click on the flash cards to see the other side!
+	</p>
+	<img id="idFlashCard1" src="1front.png" style=" height:400px;" onClick="switchBack1()">
+	<img id="idFlashCard2" src="2front.png" style=" height:400px;" onClick="switchBack2()">
+	<br>
+	<img id="idFlashCard3" src="3front.png" style=" height:400px;" onClick="switchBack3()">
+	<img id="idFlashCard4" src="4front.png" style=" height:400px;" onClick="switchBack4()">
+
+</body>
+
+</html>
